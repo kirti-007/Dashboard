@@ -9,13 +9,38 @@ import {
   Typography,
   CircularProgress,
   Box,
-  InputAdornment
+  InputAdornment,
+  IconButton,
 } from '@mui/material';
+import { styled } from '@mui/system';
 import MailIcon from '@mui/icons-material/Mail';
 import PhoneIcon from '@mui/icons-material/Phone';
 import SearchIcon from '@mui/icons-material/Search';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 
-const UserList = () => {
+
+const CustomCard = styled(Card)(({ theme }) => ({
+  border: `1px solid ${theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.2)' : '#000'}`,
+  transition: 'transform 0.2s, box-shadow 0.2s',
+  '&:hover': {
+    transform: 'scale(1.05)', 
+    boxShadow: `0 4px 20px ${theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.2)'}`, 
+  },
+}));
+
+const CustomContainer = styled(Container)({
+  textAlign: 'center',
+  paddingTop: '20px',
+  paddingBottom: '20px', 
+});
+
+const CustomTypography = styled(Typography)({
+  fontWeight: 'bold',
+  marginTop: '20px', 
+});
+
+const UserList = ({ themeMode, toggleTheme }) => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -39,11 +64,17 @@ const UserList = () => {
     user.name.toLowerCase().includes(search.toLowerCase())
   );
 
+
   return (
-    <Container>
-      <Typography variant="h4" component="h1" gutterBottom>
-        User List
-      </Typography>
+    <CustomContainer>
+      <Box display="flex" justifyContent="space-between" alignItems="center">
+        <Typography variant="h4" component="h1" gutterBottom>
+          User List
+        </Typography>
+        <IconButton onClick={toggleTheme} color="inherit">
+          {themeMode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+        </IconButton>
+      </Box>
       <TextField
         label="Search Users"
         variant="outlined"
@@ -62,14 +93,14 @@ const UserList = () => {
       {loading ? (
         <CircularProgress />
       ) : (
-        <Grid container spacing={3}>
+        <Grid container spacing={3} justifyContent="center" sx={{ marginTop: '20px' }}>
           {filteredUsers.map((user) => (
             <Grid item xs={12} sm={6} md={4} key={user.id}>
-              <Card variant="outlined">
+              <CustomCard variant="outlined">
                 <CardContent>
-                  <Typography variant="h6" component="div">
+                  <CustomTypography variant="h6" component="div">
                     {user.name}
-                  </Typography>
+                  </CustomTypography>
                   <Box display="flex" alignItems="center" mt={2}>
                     <MailIcon fontSize="small" />
                     <Typography variant="body2" color="textSecondary" ml={1}>
@@ -83,12 +114,12 @@ const UserList = () => {
                     </Typography>
                   </Box>
                 </CardContent>
-              </Card>
+              </CustomCard>
             </Grid>
           ))}
         </Grid>
       )}
-    </Container>
+    </CustomContainer>
   );
 };
 

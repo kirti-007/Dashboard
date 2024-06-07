@@ -1,13 +1,27 @@
-import React from 'react';
-import { Container, CssBaseline } from '@mui/material';
+import React, { useState } from 'react';
+import { Container, CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 import UserList from './components/UserList';
 
 const App = () => {
+  const [themeMode, setThemeMode] = useState('light');
+
+  const toggleTheme = () => {
+    setThemeMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+  };
+
+  const theme = createTheme({
+    palette: {
+      mode: themeMode,
+    },
+  });
+
   return (
-    <Container>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
-      <UserList />
-    </Container>
+      <Container>
+        <UserList themeMode={themeMode} toggleTheme={toggleTheme} />
+      </Container>
+    </ThemeProvider>
   );
 };
 
